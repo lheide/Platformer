@@ -72,7 +72,7 @@ var levelstate4 =  {
             platforms.create(794, 764, 'platform')
             platforms.create(1042, 764, 'platform')
             platforms.create(1290, 764, 'platform')
-            platforms.create(1538, 764, 'platform')
+            platforms.create(1539, 764, 'platform')
 
             
             
@@ -85,7 +85,7 @@ var levelstate4 =  {
             
 //            level4ending.setAll('body.immovable', true);
             
-//            level4ending.create(450, 300, 'fin')
+//            level4ending.create(450, 300, 'fin');
             
             //Spikegruppe
             //spikes = game.add.group();
@@ -111,7 +111,10 @@ var levelstate4 =  {
             
             monster.enableBody = true;
             
+            monster.setAll('body.imovable', true);
+            
             monster.create(1000, 700, 'opponent')
+            
             //Plattform sind unbeweglich
             platforms.setAll('body.immovable', true);
             platforms.setAll('body.allowGravity', false);
