@@ -1,6 +1,7 @@
 var Score = 0
 var scoreText;
 var background;
+var monster;
 var levelstate4 =  {
 
         preload : function() {
@@ -98,6 +99,7 @@ var levelstate4 =  {
             
             //spikes.setAll('body.immovable', true);
             
+            
             //Coingruppe
             coins = game.add.group();
             
@@ -111,9 +113,10 @@ var levelstate4 =  {
             
             monster.enableBody = true;
             
-            monster.setAll('body.imovable', true);
+            monster.create(Math.random() *1652, 700, 'opponent');
             
-            monster.create(1000, 700, 'opponent')
+            game.physics.arcade.enable(monster);
+            
             
             //Plattform sind unbeweglich
             platforms.setAll('body.immovable', true);
@@ -143,12 +146,19 @@ var levelstate4 =  {
         game.physics.arcade.collide(player, coins, collectCoin, null, this);
         //game.physics.arcade.collide(player, spikes, gameOver, null, this);
 //        game.physics.arcade.collide(player, level4ending, level4finish, null, this);
+        game.physics.arcade.collide(player, monster, monsterGameOver, null, this);
         
         //Beweglicher Hintergrund
         //background.x +=4;
-  ;
+  
         //Spieler bewegt sich nicht automatisch
         player.body.velocity.x = 0;
+        
+        
+        for(var i = 0; i < monster.length; i++){
+            var monsterObject = monster.children[i];
+            monsterObject.body.velocity.x = 100;    
+        }
         
         //Nach links bewegen
         if (cursors.left.isDown){
@@ -177,6 +187,12 @@ function collectCoin (player, coin) {
            coin.kill();
            scoreText.text = 'Coins: ' + game.global.score++;
         }
+
+//MonsterGameOver
+function monsterGameOver (player,  monster){
+    player.kill();
+    this.state.start('gameover');
+}
 //GameOver
 //function gameOver (player, spikes) {
 //            player.kill();
