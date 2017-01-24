@@ -30,6 +30,8 @@ var levelstate4 =  {
             game.load.image('invislaby2','assets/invislaby2.png');
             //Gegner
             game.load.image('opponent', 'assets/Opponent.png');
+            //Kleine Plattform
+            game.load.image('smallplat', 'assets/Small platform.png')
         
         },
         create : function() {
@@ -44,7 +46,7 @@ var levelstate4 =  {
              
             
             //Weltgröße
-            game.world.setBounds(0, 0, 3500, 919);
+            game.world.setBounds(0, 0, 1653, 919);
             
             
             //Hintergrund einfügen
@@ -66,38 +68,32 @@ var levelstate4 =  {
             movableplatforms = game.add.physicsGroup();
             
             //Plattformen erstellen
-            platforms.create(0, 764, 'platform')
-            platforms.create(248, 764, 'platform')
-            platforms.create(496, 764, 'platform')
-            platforms.create(550, 764, 'platform')
-            platforms.create(794, 764, 'platform')
-            platforms.create(1042, 764, 'platform')
-            platforms.create(1290, 764, 'platform')
-            platforms.create(1539, 764, 'platform')
-
+            platforms.create(0, 300, 'smallplat')
+            platforms.create(500, 200, 'smallplat')
+            platforms.create(800, 110, 'smallplat')
             
             
             
       
             //Zielgruppe
-//            level4ending = game.add.group();
+            level4ending = game.add.group();
             
-//            level4ending.enableBody = true;
+            level4ending.enableBody = true;
             
-//            level4ending.setAll('body.immovable', true);
+            level4ending.setAll('body.immovable', true);
             
-//            level4ending.create(450, 300, 'fin');
+            level4ending.create(800, -115, 'fin');
             
             //Spikegruppe
-            //spikes = game.add.group();
+            spikes = game.add.group();
             
-            //spikes.enableBody = true;
+            spikes.enableBody = true;
             
-            //for(var i = 0; i < 40 ;i++){
-            //    spikes.create(i  * 41.45 , 882, 'spike');
-            //}
+            for(var i = 0; i < 40 ;i++){
+                spikes.create(i  * 41.45 , 882, 'spike');
+            }
             
-            //spikes.setAll('body.immovable', true);
+            spikes.setAll('body.immovable', true);
             
             
             //Coingruppe
@@ -106,7 +102,7 @@ var levelstate4 =  {
             coins.enableBody = true;
             
             coins.create(600, 700, 'coin')
-            coins.create(300, 235, 'coin')
+            coins.create(350, 235, 'coin')
             
             //Gegnergruppe
             monster = game.add.group();
@@ -144,7 +140,7 @@ var levelstate4 =  {
         game.physics.arcade.collide(player, movableplatforms);
         game.physics.arcade.collide(player, monster);
         game.physics.arcade.collide(player, coins, collectCoin, null, this);
-        //game.physics.arcade.collide(player, spikes, gameOver, null, this);
+        game.physics.arcade.collide(player, spikes, gameOver, null, this);
 //        game.physics.arcade.collide(player, level4ending, level4finish, null, this);
         game.physics.arcade.collide(player, monster, monsterGameOver, null, this);
         
@@ -194,10 +190,10 @@ function monsterGameOver (player,  monster){
     this.state.start('gameover');
 }
 //GameOver
-//function gameOver (player, spikes) {
-//            player.kill();
-//            this.state.start('gameover');
-//         }
+function gameOver (player, spikes) {
+            player.kill();
+            this.state.start('gameover');
+         }
 
 //Ende
 //function level4finish (player, level4ending) {
