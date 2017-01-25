@@ -1,6 +1,7 @@
 var scoreText;
 var map;
-var layer;
+var backgroundLayer;
+var blockedLayer;
  var tiles;
 var levelstate =  {
 
@@ -11,8 +12,8 @@ var levelstate =  {
 
             //Player
             game.load.image('player', 'assets/player.gif');
-            game.load.tilemap('map', 'projectdata/level1test.json', null, Phaser.Tilemap.TILED_JSON);
-            game.load.image('tiles', 'assets/tilemaplevel1.png');
+            game.load.tilemap('map', 'projectdata/level1.json', null, Phaser.Tilemap.TILED_JSON);
+            game.load.image('GrassTileset', 'assets/tilemaplevel1.png');
             
                 
         },
@@ -20,25 +21,30 @@ var levelstate =  {
             
 
             
-                map = game.add.tilemap('map');
+            map = game.add.tilemap('map');
 
-                map.addTilesetImage('tiles');
+            map.addTilesetImage('GrassTileset');
             
-                map.setCollisionBetween(0, 300);
+
             
-                layer = map.createLayer('layer');
+            backgroundLayer = map.createLayer('Background');
+            blockedLayer =  map.createLayer('Objects');
             
-                  for(var tile in layer.getTiles(0, 0, layer.layer.widthInPixels, layer.layer.heightInPixels)){
-        
-                tile.collides = true;
-                }
+            map.setCollisionBetween(1, 1000, true, blockedLayer);
 
 
             //Playerspawn
-            player = game.add.sprite(30, 387, 'player');
+            player = game.add.sprite(20, 387, 'player');
             
             //Physics aktivieren
             game.physics.arcade.enable(player);
+          //  game.physics.arcade.collide(player, blockedLayer);
+            
+             //resizes the game world to match the layer dimensions
+            backgroundLayer.resizeWorld();
+
+
+
             
             //Spieler stößt gegen Weltende
             player.body.collideWorldBounds = true;
@@ -57,7 +63,7 @@ var levelstate =  {
             //Score wird eingefügt
             scoreText = game.add.text(16, 16, 'Coins: ' + game.global.score, { fontSize: 25, fill: '#ffd700'});
             
-            game.physics.arcade.collide(player, layer);
+  
             
           
     
@@ -85,7 +91,7 @@ var levelstate =  {
         
         //Sprung
         if (cursors.up.isDown && (player.body.onFloor() || player.body.touching.down)){
-            player.body.velocity.y = -300;
+            player.body.velocity.y = -400;
         }
         
         //Schnellerer Fall
