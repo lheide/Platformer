@@ -1,4 +1,7 @@
 var scoreText;
+var map;
+var layer;
+ var tiles;
 var levelstate =  {
 
         preload : function() {
@@ -8,24 +11,31 @@ var levelstate =  {
 
             //Player
             game.load.image('player', 'assets/player.gif');
-            
+            game.load.tilemap('map', 'projectdata/level1test.json', null, Phaser.Tilemap.TILED_JSON);
+            game.load.image('tiles', 'assets/tilemaplevel1.png');
             
                 
         },
         create : function() {
             
-            //Späterer Hintergrund
-            //background = game.add.image(game.world.X, game.world.Y, 'background');
-            //background.x = 0;
-            //background.y = 0;
-            //background.height = game.height;
-            //background.width = game.width; 
-            
 
-            //Weltgröße
-            game.world.setBounds(0, 0, 1653, 919);
+            
+                map = game.add.tilemap('map');
+
+                map.addTilesetImage('tiles');
+            
+                map.setCollisionBetween(0, 300);
+            
+                layer = map.createLayer('layer');
+            
+                  for(var tile in layer.getTiles(0, 0, layer.layer.widthInPixels, layer.layer.heightInPixels)){
+        
+                tile.collides = true;
+                }
+
+
             //Playerspawn
-            player = game.add.sprite(0, 387, 'player');
+            player = game.add.sprite(30, 387, 'player');
             
             //Physics aktivieren
             game.physics.arcade.enable(player);
@@ -34,6 +44,7 @@ var levelstate =  {
             player.body.collideWorldBounds = true;
             //Schwerkraft
             player.body.gravity.y = 500;
+
             
 
             //Pfeiltasten einfügen
@@ -42,8 +53,18 @@ var levelstate =  {
             //Kamera folgt Spieler
             game.camera.follow(player);
             
+            
             //Score wird eingefügt
             scoreText = game.add.text(16, 16, 'Coins: ' + game.global.score, { fontSize: 25, fill: '#ffd700'});
+            
+            game.physics.arcade.collide(player, layer);
+            
+          
+    
+            
+
+            
+        
       
     },
     
@@ -74,3 +95,7 @@ var levelstate =  {
     
     }
 }
+    
+    
+    
+

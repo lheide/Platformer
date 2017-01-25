@@ -7,7 +7,7 @@ var loadstate = {
     
     create: function(){
         
-        game.state.start('mainmenu');
+        game.state.start('level1');
         
     }
     
