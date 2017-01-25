@@ -3,15 +3,12 @@ var mainmenustate = {
 
         preload : function() {
 
-            this.load.spritesheet('button',
-                                'assets/menu/button_editor.png', 0, 0);
-
+            this.load.spritesheet('level1button',
+                                'assets/menu/button_level1.png', 0, 0);
             this.game.load.json('version', 'projectdata/version.json');
-                
-                
-            this.load.spritesheet('l1button', 'assets/Buttonl1.png', 0, 0);
+
             
-            this.load.image('mainmenu', 'assets/mm2.png');
+            this.load.image('mainmenu', 'assets/menu/background.png');
 
         },
         create : function() {
@@ -34,11 +31,11 @@ var mainmenustate = {
             
             button = this.add.button(this.world)
                 
-            game.add.button(780, 410, 'l1button', actionOnClick,
+            game.add.button(780, 410, 'level1button', actionOnClick,
                                this, 1, 0, 2);
         }
     }
 
 function actionOnClick() {
-    this.state.start("level4");
+    this.state.start("level1");
 }
