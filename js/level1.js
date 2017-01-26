@@ -2,7 +2,7 @@ var scoreText;
 var map;
 var backgroundLayer;
 var blockedLayer;
- var tiles;
+var coins;
 var levelstate =  {
 
         preload : function() {
@@ -14,6 +14,7 @@ var levelstate =  {
             game.load.image('player', 'assets/player.gif');
             game.load.tilemap('map', 'projectdata/level1.json', null, Phaser.Tilemap.TILED_JSON);
             game.load.image('GrassTileset', 'assets/tilemaplevel1.png');
+            game.load.image('coin', 'assets/coin.png');
             
                 
         },
@@ -26,19 +27,19 @@ var levelstate =  {
             map.addTilesetImage('GrassTileset');
             
 
-            
-            backgroundLayer = map.createLayer('Background');
-            blockedLayer =  map.createLayer('Objects');
-            
-            map.setCollisionBetween(1, 1000, true, blockedLayer);
+            coins = game.add.group();
+             coins.enableBody = true;
+            map.createFromObjects('coins', 35, 'coin', 0, true, false, coins);
+            backgroundLayer = map.createLayer('background');
+            map.setCollisionBetween(1, 5000, true, 'background');
 
 
             //Playerspawn
-            player = game.add.sprite(20, 387, 'player');
+            player = game.add.sprite(20, 100, 'player');
             
             //Physics aktivieren
             game.physics.arcade.enable(player);
-          //  game.physics.arcade.collide(player, blockedLayer);
+            game.physics.arcade.collide(player, backgroundLayer);
             
              //resizes the game world to match the layer dimensions
             backgroundLayer.resizeWorld();
@@ -75,7 +76,10 @@ var levelstate =  {
     },
     
     update: function(){
-        
+           scoretext = game.global.score;
+            
+            game.physics.arcade.overlap(player, coins, collectCoin, null, this);
+            game.physics.arcade.collide(player, backgroundLayer, null, null, this);
         //Spieler bewegt sich nicht automatisch
         player.body.velocity.x = 0;
         
@@ -100,6 +104,13 @@ var levelstate =  {
         }
     
     }
+    
+}
+
+function collectCoin(player, coin) {
+
+    coin.kill();
+    game.global.score++;
 }
     
     
