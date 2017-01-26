@@ -3,24 +3,31 @@ var map;
 var backgroundLayer;
 var blockedLayer;
 var coins;
+var spikes;
+var monster;
 var levelstate =  {
 
         preload : function() {
             
             //Hintergrundfarbe
-            game.stage.backgroundColor = '#FFF';
+            
 
             //Player
-            game.load.image('player', 'assets/player.gif');
+            game.load.image('player', 'assets/Sonicsprite.png');
             game.load.tilemap('map', 'projectdata/level1.json', null, Phaser.Tilemap.TILED_JSON);
             game.load.image('GrassTileset', 'assets/tilemaplevel1.png');
             game.load.image('coin', 'assets/coin.png');
+            game.load.image('spike', 'assets/spike.png');
+            game.load.image('bg', 'assets/Background.png')
+            game.load.image('monster', 'assets/Opponent.png')
             
                 
         },
         create : function() {
             
-
+            monster = game.add.group();
+            monster.enableBody = true;
+            monster.create = (100, 450, 'monster');
             
             map = game.add.tilemap('map');
 
@@ -28,14 +35,21 @@ var levelstate =  {
             
 
             coins = game.add.group();
-             coins.enableBody = true;
+            coins.enableBody = true;
+            
+            spikes = game.add.group();
+            spikes.enableBody = true;
+            
             map.createFromObjects('coins', 35, 'coin', 0, true, false, coins);
+            map.createFromObjects('spikes', 47, 'spike', 0, true, false, spikes);
+            
             backgroundLayer = map.createLayer('background');
             map.setCollisionBetween(1, 5000, true, 'background');
 
-
+            
+           
             //Playerspawn
-            player = game.add.sprite(20, 100, 'player');
+            player = game.add.sprite(0, 450, 'player');
             
             //Physics aktivieren
             game.physics.arcade.enable(player);
@@ -79,6 +93,7 @@ var levelstate =  {
            scoretext = game.global.score;
             
             game.physics.arcade.overlap(player, coins, collectCoin, null, this);
+           game.physics.arcade.overlap(player, spikes, gameOver, null, this);
             game.physics.arcade.collide(player, backgroundLayer, null, null, this);
         //Spieler bewegt sich nicht automatisch
         player.body.velocity.x = 0;
@@ -111,6 +126,10 @@ function collectCoin(player, coin) {
 
     coin.kill();
     game.global.score++;
+    console.log(game.global.score);
+}
+function gameOver(player, spike){
+    this.state.start('gameover')
 }
     
     
